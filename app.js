@@ -6,20 +6,19 @@
     const $body = get('body')
     const $nav = get('nav')
 
-    var checkData;
+    let checkData;
 
     const getPage = () => {
-        checkData = Number.parseInt(localStorage.getItem("check"))
-        if (checkData === null) {
-            localStorage.setItem("check", 0)
-            $body.classList.remove('preload')        
+        checkData = localStorage.getItem("check")
+        if (checkData == null) {
+            localStorage.setItem("check", "preload")
         } 
 
-        if(checkData === 0) {
+        if(checkData === "preload") {
             $body.classList.remove('preload')
         }
 
-        if (checkData === 1) {
+        if (checkData === "active") {
             $nav.classList.add('active')
         }
     
@@ -27,32 +26,25 @@
         if ($body.classList.contains('active')) {
             $body.style.visibility = 'visible'
         }
-        console.log(checkData)
     }
 
     const openToggle = () => {
-        console.log(checkData)
-        if (checkData === 0) {
+        if (checkData === "preload") {
             $nav.classList.add('active')
-            checkData = 1
-            localStorage.setItem("check", "1")
-        } else if(checkData === 1){
-            checkData = 0
-            $nav.classList.remove('active')
-            localStorage.setItem("check", "0")
+            checkData = "active"
+            localStorage.setItem("check", checkData)
+        } else if(checkData === "active"){
             $body.classList.remove('preload')
+            checkData = "preload"
+            $nav.classList.remove('active')
+            localStorage.setItem("check", checkData)
         }
     }
 
     const init = () => {
         const $toggle = get('.toggle')
-        window.addEventListener('DOMContentLoaded', () => {
-            getPage()
-        })
+        window.onload = () => { getPage()}
         $toggle.addEventListener('click', openToggle)
-
     }
-
-
     init()
 })()
